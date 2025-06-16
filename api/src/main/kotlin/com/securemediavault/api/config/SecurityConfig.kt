@@ -15,7 +15,7 @@ class SecurityConfig {
         return http
             .csrf { it.disable() }
             .authorizeExchange {
-                it.pathMatchers("/health").permitAll()
+                it.pathMatchers("/health", "/auth/**").permitAll()
                     .anyExchange().authenticated()
             }
             .httpBasic { it.disable() }
