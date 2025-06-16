@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: secure-media-vault-api
+  r2dbc:
+    url: r2dbc:postgresql://postgres:5432/media_vault
+    username: postgres
+    password: postgres
+  data:
+    redis:
+      host: redis
+      port: 6379
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+  main:
+    web-application-type: reactive
+
+server:
+  port: 8081
