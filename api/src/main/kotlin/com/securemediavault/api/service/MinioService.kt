@@ -85,13 +85,7 @@ class MinioService(
         }
     }
 
-    /**
-     * Elimina un archivo específico de MinIO y envía un evento a RabbitMQ.
-     * @param fileName El nombre del archivo a eliminar.
-     * @return Un Mono<Void> que indica la finalización de la operación.
-     */
     fun deleteFile(fileName: String): Mono<Void> {
-        // Corrección: Especificar el tipo genérico <Void> para Mono.fromRunnable
         return Mono.fromRunnable<Void> {
             client.removeObject(
                 RemoveObjectArgs.builder()
@@ -99,7 +93,6 @@ class MinioService(
                     .`object`(fileName)
                     .build()
             )
-            // Opcional: Enviar un evento de archivo eliminado a RabbitMQ
             rabbitTemplate.convertAndSend("file_exchange", "file.deleted", fileName)
         }.then()
     }
