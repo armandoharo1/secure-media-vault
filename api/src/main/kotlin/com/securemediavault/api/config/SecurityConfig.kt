@@ -19,7 +19,14 @@ class SecurityConfig(
             .csrf { it.disable() }
             .securityContextRepository(jwtSecurityContextRepository)
             .authorizeExchange {
-                it.pathMatchers("/health", "/auth/**").permitAll()
+                it.pathMatchers(
+                    "/health",
+                    "/auth/**",
+                    "/swagger-ui.html",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**",
+                    "/webjars/**"
+                ).permitAll()
                     .anyExchange().authenticated()
             }
             .httpBasic { it.disable() }
