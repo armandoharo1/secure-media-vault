@@ -1,0 +1,1 @@
+Scripts para tareas de DevOps, como migraciones de BD, generación de datos de prueba (seed script para 10k archivos), etc. Pendientes de implementación por tiempo

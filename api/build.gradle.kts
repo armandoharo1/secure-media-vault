@@ -40,12 +40,18 @@ dependencies {
 	runtimeOnly("org.postgresql:r2dbc-postgresql")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
+	// Dependencias de testing
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
 	testImplementation("org.springframework.amqp:spring-rabbit-test")
 	testImplementation("org.springframework.security:spring-security-test")
+	testImplementation("io.mockk:mockk:1.12.0")
+	testImplementation(platform("org.testcontainers:testcontainers-bom:1.19.7"))
+	testImplementation("org.testcontainers:postgresql")
+	testImplementation("org.testcontainers:minio")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 

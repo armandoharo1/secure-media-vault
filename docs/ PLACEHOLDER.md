@@ -1,0 +1,1 @@
+Documentación adicional del proyecto, diagramas de arquitectura, decisiones de diseño detalladas. Pendiente de creación
