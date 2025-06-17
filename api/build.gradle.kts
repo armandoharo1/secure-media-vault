@@ -32,6 +32,7 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
 	implementation("org.springframework.security:spring-security-crypto")
+	implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.5.0")
 	implementation("io.minio:minio:8.5.7")
 	implementation(project(":shared"))
 	developmentOnly("org.springframework.boot:spring-boot-devtools")

@@ -12,6 +12,10 @@ spring:
       host: localhost
       port: 6379
 
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+
   rabbitmq:
     host: localhost
     port: 5672
