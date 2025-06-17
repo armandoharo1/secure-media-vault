@@ -10,8 +10,8 @@ import java.util.*
 class JWTUtils {
 
     private val jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS256)
-    private val accessTokenExpiration = 1000 * 60 * 15 // 15 minutos
-    private val refreshTokenExpiration = 1000 * 60 * 60 * 24 // 24 horas
+    private val accessTokenExpiration = 1000 * 60 * 15
+    private val refreshTokenExpiration = 1000 * 60 * 60 * 24
 
     fun generateAccessToken(username: String): String {
         return Jwts.builder()

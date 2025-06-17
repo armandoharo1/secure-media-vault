@@ -1,18 +1,24 @@
-import org.springframework.amqp.core.*
+package com.securemediavault.worker.config
+
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.amqp.rabbit.connection.ConnectionFactory
+import org.springframework.amqp.rabbit.core.RabbitTemplate
 
 @Configuration
-class RabbitMQConfig {
+class RabbitConfig {
 
     @Bean
-    fun exchange(): TopicExchange = TopicExchange("media.file.uploaded")
+    fun messageConverter(objectMapper: ObjectMapper): Jackson2JsonMessageConverter {
+        return Jackson2JsonMessageConverter(objectMapper)
+    }
 
     @Bean
-    fun queue(): Queue = Queue("file-uploaded-queue")
-
-    @Bean
-    fun binding(queue: Queue, exchange: TopicExchange): Binding {
-        return BindingBuilder.bind(queue).to(exchange).with("file-uploaded-queue")
+    fun rabbitTemplate(connectionFactory: ConnectionFactory, messageConverter: Jackson2JsonMessageConverter): RabbitTemplate {
+        val template = RabbitTemplate(connectionFactory)
+        template.messageConverter = messageConverter
+        return template
     }
 }

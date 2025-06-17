@@ -1,13 +1,16 @@
 spring:
   application:
     name: secure-media-vault-worker
-
   rabbitmq:
     host: localhost
     port: 5672
-
   r2dbc:
-    url: none  # ⛔️ Evita error de R2DBC
+    url: none
+
+minio:
+  url: http://localhost:9200
+  accessKey: minio
+  secretKey: minio123
 
 server:
   port: 8082

@@ -1,7 +1,6 @@
 package com.securemediavault.api.service
 
 import io.minio.*
-import io.minio.messages.Item
 import com.securemediavault.shared.dto.FileUploadedEvent
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Value
@@ -48,7 +47,6 @@ class MinioService(
                     .build()
             )
 
-            // ✅ Crear y enviar evento como objeto, no como JSON string
             val event = FileUploadedEvent(
                 filename = fileName,
                 size = size,

@@ -26,6 +26,6 @@ class JwtSecurityContextRepository(
     }
 
     override fun save(exchange: ServerWebExchange, context: SecurityContext): Mono<Void> {
-        return Mono.empty() // No necesitas guardar contexto para JWT stateless
+        return Mono.empty()
     }
 }
