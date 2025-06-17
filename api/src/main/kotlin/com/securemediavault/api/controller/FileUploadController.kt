@@ -40,4 +40,15 @@ class FileUploadController(
     fun listFiles(): Flux<String> {
         return minioService.listFiles()
     }
+
+    @GetMapping("/download/{fileName}")
+    fun downloadFile(@PathVariable fileName: String): Mono<ResponseEntity<ByteArray>> {
+        return minioService.download(fileName)
+            .map { bytes ->
+                ResponseEntity.ok()
+                    .header("Content-Disposition", "attachment; filename=\"$fileName\"")
+                    .contentLength(bytes.size.toLong())
+                    .body(bytes)
+            }
+    }
 }

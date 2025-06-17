@@ -58,4 +58,19 @@ class MinioService(
         return Flux.fromIterable(results)
             .map { it.get().objectName() }  // ✅ aquí es donde corregimos
     }
+
+
+    fun download(fileName: String): Mono<ByteArray> {
+        return Mono.fromCallable {
+            client.getObject(
+                GetObjectArgs.builder()
+                    .bucket(bucket)
+                    .`object`(fileName)
+                    .build()
+            ).use { inputStream ->
+                inputStream.readAllBytes()
+            }
+        }
+    }
+
 }
