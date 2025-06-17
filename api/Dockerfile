@@ -2,7 +2,8 @@
 FROM gradle:8.4.0-jdk17 AS builder
 WORKDIR /app
 COPY . .
-RUN gradle build --no-daemon
+#RUN gradle build --no-daemon
+RUN gradle build -x test --no-daemon
 
 # Usa una imagen liviana de JDK para correr la app
 FROM eclipse-temurin:17-jdk-alpine

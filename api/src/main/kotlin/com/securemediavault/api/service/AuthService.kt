@@ -27,8 +27,9 @@ class AuthService(
     }
 
     fun login(username: String, rawPassword: String): Mono<LoginResponse> {
+        println("🔑 Login request for $username with password: $rawPassword")
         return userRepository.findByUsername(username)
-            .switchIfEmpty(Mono.error(Exception("Invalid credentials")))
+            .doOnNext { println("🎯 Found user: ${it.username}, encoded: ${it.password}") }
             .filter { passwordEncoder.matches(rawPassword, it.password) }
             .switchIfEmpty(Mono.error(Exception("Invalid credentials")))
             .map {
@@ -37,6 +38,7 @@ class AuthService(
                 LoginResponse(accessToken, refreshToken)
             }
     }
+
 
     fun refreshAccessToken(refreshToken: String): Mono<LoginResponse> {
         return Mono.fromCallable {

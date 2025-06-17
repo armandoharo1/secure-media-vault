@@ -32,6 +32,7 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
 	implementation("org.springframework.security:spring-security-crypto")
+	implementation("io.minio:minio:8.5.7")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("org.postgresql:postgresql")
 	runtimeOnly("org.postgresql:r2dbc-postgresql")
