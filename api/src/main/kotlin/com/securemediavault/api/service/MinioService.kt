@@ -1,18 +1,24 @@
 package com.securemediavault.api.service
 
+import com.securemediavault.api.dto.FileUploadedEvent
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.minio.*
 import io.minio.messages.Item
+import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.io.InputStream
+import java.time.Instant
 
 @Service
 class MinioService(
     @Value("\${minio.url}") private val minioUrl: String,
     @Value("\${minio.accessKey}") private val accessKey: String,
-    @Value("\${minio.secretKey}") private val secretKey: String
+    @Value("\${minio.secretKey}") private val secretKey: String,
+    private val rabbitTemplate: RabbitTemplate,
+    private val objectMapper: ObjectMapper
 ) {
 
     private val client = MinioClient.builder()
@@ -43,6 +49,17 @@ class MinioService(
                     .contentType(contentType)
                     .build()
             )
+
+            // 🔔 Crear evento y enviar a RabbitMQ
+            val event = FileUploadedEvent(
+                filename = fileName,
+                size = size,
+                contentType = contentType,
+                uploadedAt = Instant.now()
+            )
+            val message = objectMapper.writeValueAsString(event)
+            rabbitTemplate.convertAndSend("media.file.uploaded", message)
+
             fileName
         }
     }
@@ -56,9 +73,8 @@ class MinioService(
         )
 
         return Flux.fromIterable(results)
-            .map { it.get().objectName() }  // ✅ aquí es donde corregimos
+            .map { it.get().objectName() }
     }
-
 
     fun download(fileName: String): Mono<ByteArray> {
         return Mono.fromCallable {
@@ -72,5 +88,4 @@ class MinioService(
             }
         }
     }
-
 }
