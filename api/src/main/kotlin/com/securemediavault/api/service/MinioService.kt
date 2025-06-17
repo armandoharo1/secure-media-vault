@@ -1,9 +1,8 @@
 package com.securemediavault.api.service
 
-import com.securemediavault.api.dto.FileUploadedEvent
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.minio.*
 import io.minio.messages.Item
+import com.securemediavault.shared.dto.FileUploadedEvent
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -17,8 +16,7 @@ class MinioService(
     @Value("\${minio.url}") private val minioUrl: String,
     @Value("\${minio.accessKey}") private val accessKey: String,
     @Value("\${minio.secretKey}") private val secretKey: String,
-    private val rabbitTemplate: RabbitTemplate,
-    private val objectMapper: ObjectMapper
+    private val rabbitTemplate: RabbitTemplate
 ) {
 
     private val client = MinioClient.builder()
@@ -50,15 +48,14 @@ class MinioService(
                     .build()
             )
 
-            // ✅ Enviar evento a la cola correcta
+            // ✅ Crear y enviar evento como objeto, no como JSON string
             val event = FileUploadedEvent(
                 filename = fileName,
                 size = size,
                 contentType = contentType,
                 uploadedAt = Instant.now()
             )
-            val message = objectMapper.writeValueAsString(event)
-            rabbitTemplate.convertAndSend("file-uploaded-queue", message)
+            rabbitTemplate.convertAndSend("media.file.uploaded", "file-uploaded-queue", event)
 
             fileName
         }

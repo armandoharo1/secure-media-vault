@@ -1,4 +1,4 @@
-package com.securemediavault.worker.dto
+package com.securemediavault.shared.dto
 
 import java.time.Instant
 
