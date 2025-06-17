@@ -6,6 +6,7 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.web.bind.annotation.*
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @RestController
@@ -23,7 +24,7 @@ class FileUploadController(
             .flatMap { dataBuffer ->
                 val bytes = ByteArray(dataBuffer.readableByteCount())
                 dataBuffer.read(bytes)
-                DataBufferUtils.release(dataBuffer) // Liberar recursos
+                DataBufferUtils.release(dataBuffer) // ✅ liberar correctamente
                 val inputStream = bytes.inputStream()
                 minioService.upload(
                     file.filename(),
@@ -33,5 +34,10 @@ class FileUploadController(
                 )
             }
             .map { ResponseEntity.ok("Archivo '$it' subido correctamente a MinIO") }
+    }
+
+    @GetMapping("/list")
+    fun listFiles(): Flux<String> {
+        return minioService.listFiles()
     }
 }

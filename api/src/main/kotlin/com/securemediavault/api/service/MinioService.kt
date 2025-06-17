@@ -1,12 +1,10 @@
 package com.securemediavault.api.service
 
-import io.minio.BucketExistsArgs
-import io.minio.MakeBucketArgs
-import io.minio.MinioClient
-import io.minio.PutObjectArgs
+import io.minio.*
+import io.minio.messages.Item
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import org.springframework.web.multipart.MultipartFile
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.io.InputStream
 
@@ -47,5 +45,17 @@ class MinioService(
             )
             fileName
         }
+    }
+
+    fun listFiles(): Flux<String> {
+        val results = client.listObjects(
+            ListObjectsArgs.builder()
+                .bucket(bucket)
+                .recursive(true)
+                .build()
+        )
+
+        return Flux.fromIterable(results)
+            .map { it.get().objectName() }  // ✅ aquí es donde corregimos
     }
 }
