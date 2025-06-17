@@ -2,6 +2,7 @@ package com.securemediavault.api.controller
 
 import com.securemediavault.api.service.MinioService
 import org.springframework.core.io.buffer.DataBufferUtils
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
@@ -49,6 +50,16 @@ class FileUploadController(
                     .header("Content-Disposition", "attachment; filename=\"$fileName\"")
                     .contentLength(bytes.size.toLong())
                     .body(bytes)
+            }
+    }
+
+
+    @DeleteMapping("/delete/{fileName}")
+    fun deleteFile(@PathVariable fileName: String): Mono<ResponseEntity<String>> {
+        return minioService.deleteFile(fileName)
+            .thenReturn(ResponseEntity.ok("Archivo '$fileName' eliminado correctamente de MinIO"))
+            .onErrorResume { e ->
+                Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el archivo '$fileName': ${e.message}"))
             }
     }
 }
