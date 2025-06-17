@@ -50,7 +50,7 @@ class MinioService(
                     .build()
             )
 
-            // 🔔 Crear evento y enviar a RabbitMQ
+            // ✅ Enviar evento a la cola correcta
             val event = FileUploadedEvent(
                 filename = fileName,
                 size = size,
@@ -58,7 +58,7 @@ class MinioService(
                 uploadedAt = Instant.now()
             )
             val message = objectMapper.writeValueAsString(event)
-            rabbitTemplate.convertAndSend("media.file.uploaded", message)
+            rabbitTemplate.convertAndSend("file-uploaded-queue", message)
 
             fileName
         }
